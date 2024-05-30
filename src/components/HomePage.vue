@@ -2,6 +2,7 @@
 import "primeicons/primeicons.css";
 
 import InputText from "primevue/inputtext";
+import Tag from "primevue/tag";
 
 import ListTopic from "./ListTopics/ListTopic.vue";
 import RecentTopic from "../UIComponents/RecentTopic.vue";
@@ -43,7 +44,14 @@ const inputSearch = ref("");
           <RecentTopic class="recent" />
         </div>
       </div>
-      <span class="recommended-topic-title">Recommended Topic</span>
+      <div class="recommended-topic">
+        <span class="recommended-topic-title">Recommended Topic</span>
+        <div class="tag-group">
+          <Tag severity="secondary" value="Secondary"></Tag>
+          <Tag severity="secondary" value="Secondary"></Tag>
+          <Tag severity="secondary" value="Secondary"></Tag>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -114,5 +122,17 @@ const inputSearch = ref("");
 .recent-topic {
   border-top: 2px solid rgb(178, 178, 178);
   margin-top: 10px;
+}
+
+.recommended-topic {
+  margin-top: 20px;
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.tag-group {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
 }
 </style>
