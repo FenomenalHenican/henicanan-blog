@@ -6,6 +6,7 @@ import Tag from "primevue/tag";
 
 import ListTopic from "./ListTopics/ListTopic.vue";
 import RecentTopic from "../UIComponents/RecentTopic.vue";
+import LoginModal from "../UIComponents/LoginModal.vue";
 
 import { useRouter } from "vue-router";
 import { ref } from "vue";
@@ -24,6 +25,9 @@ const inputSearch = ref("");
         <li><i class="pi pi-bookmark" /></li>
         <li><i class="pi pi-receipt" /></li>
         <li><div class="underline-left-nav" /></li>
+        <li class="btn-login mt-9">
+          <LoginModal />
+        </li>
       </ul>
     </div>
     <div class="content">
@@ -47,9 +51,16 @@ const inputSearch = ref("");
       <div class="recommended-topic">
         <span class="recommended-topic-title">Recommended Topic</span>
         <div class="tag-group">
-          <Tag severity="secondary" value="Secondary"></Tag>
-          <Tag severity="secondary" value="Secondary"></Tag>
-          <Tag severity="secondary" value="Secondary"></Tag>
+          <div class="fist-group">
+            <Tag severity="secondary" class="tag" value="Secondary"></Tag>
+            <Tag severity="secondary" class="tag" value="Secondary"></Tag>
+            <Tag severity="secondary" class="tag" value="Secondary"></Tag>
+          </div>
+          <div class="fist-group">
+            <Tag severity="secondary" class="tag" value="Secondary"></Tag>
+            <Tag severity="secondary" class="tag" value="Secondary"></Tag>
+            <Tag severity="secondary" class="tag" value="Secondary"></Tag>
+          </div>
         </div>
       </div>
     </div>
@@ -84,10 +95,21 @@ const inputSearch = ref("");
   margin-top: 30px;
 }
 
+.top-colomn-left-nav li i:hover {
+  background-color: rgb(199, 199, 199);
+  border-radius: 5px;
+  padding: 6px;
+  transition: 0.2s;
+}
+
 .underline-left-nav {
   border-top: 2px solid rgb(178, 178, 178);
   width: 50%;
   margin-top: 40px;
+}
+
+.btn-auth {
+  margin-top: 20%;
 }
 
 .content {
@@ -100,13 +122,14 @@ const inputSearch = ref("");
   margin-left: 4vh;
   border-left: 2px solid rgb(178, 178, 178);
   padding-left: 30px;
-  height: 100vh;
+  height: 100%;
 }
 
 .input-search {
   padding-left: 10px;
   height: 30px;
   margin-top: 30vh;
+  border: 2px solid rgb(178, 178, 178);
 }
 
 .wrapper-recent-topic {
@@ -132,7 +155,13 @@ const inputSearch = ref("");
 
 .tag-group {
   margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
+}
+
+.tag {
+  margin-right: 10px;
+}
+
+.btn-login {
+  font-size: 20px;
 }
 </style>
