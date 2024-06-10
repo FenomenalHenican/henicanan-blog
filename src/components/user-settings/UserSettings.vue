@@ -2,6 +2,7 @@
 import InputText from "primevue/inputtext";
 import Textarea from "primevue/textarea";
 import FileUpload from "primevue/fileupload";
+import Button from "primevue/button";
 
 import SelectCountry from "./SelectCountry.vue";
 
@@ -42,9 +43,10 @@ const onUpload = ref(null);
             v-model="inputSecondName"
           />
         </div>
-      </div>
-      <div class="selector-country">
-        <SelectCountry />
+        <div class="wrapper-select-country">
+          <span class="title-select-country">Country</span>
+          <SelectCountry class="select-country" />
+        </div>
       </div>
     </div>
     <div class="upload-file">
@@ -90,6 +92,7 @@ const onUpload = ref(null);
         />
       </div>
     </div>
+    <Button label="Save data" class="btn-sava-data" />
   </div>
 </template>
 <style scoped>
@@ -124,7 +127,6 @@ const onUpload = ref(null);
 }
 
 .upload-file {
-  margin-top: 20px;
   margin-left: 110px;
 }
 
@@ -139,7 +141,8 @@ const onUpload = ref(null);
 }
 
 .title-input-first-name,
-.title-input-second-name {
+.title-input-second-name,
+.title-select-country {
   font-weight: 600;
 }
 
@@ -147,6 +150,16 @@ const onUpload = ref(null);
 .input-second-name {
   height: 30px;
   width: 300px;
+  margin-top: 10px;
+}
+
+.wrapper-select-country {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.select-country {
   margin-top: 10px;
 }
 
@@ -206,5 +219,9 @@ const onUpload = ref(null);
   padding-left: 10px;
   padding-top: 10px;
   font-size: 20px;
+}
+
+.btn-save-data {
+  margin-top: 30px;
 }
 </style>
