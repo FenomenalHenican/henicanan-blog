@@ -4,34 +4,58 @@ import "primeicons/primeicons.css";
 import InputText from "primevue/inputtext";
 import Tag from "primevue/tag";
 
-import ListTopic from "./ListTopics/ListTopic.vue";
 import RecentTopic from "../UIComponents/RecentTopic.vue";
 import LoginModal from "../UIComponents/LoginModal.vue";
 
-import { useRouter } from "vue-router";
-import { ref } from "vue";
+import { useRoute } from "vue-router";
+import { ref, watchEffect } from "vue";
+import router from "../router";
 
-const router = useRouter();
+const route = useRoute();
 
 const inputSearch = ref("");
+
+const navigateTo = (section) => {
+  router.push({ name: section });
+};
+
+const isActive = (section) => {
+  return route.name === section;
+};
+
+watchEffect(() => {
+  route.name,
+    (newValueRoute) => {
+      if (!newValueRoute) {
+        navigateTo("ListTopic");
+      }
+    };
+});
 </script>
 
 <template>
   <div class="container">
     <div class="left-nav">
       <ul class="top-colomn-left-nav">
-        <li><i class="pi pi-home" /></li>
+        <li :class="{ active: isActive('PersonalArea') }">
+          <i class="pi pi-home" @click="navigateTo('PersonalArea')" />
+        </li>
         <li><i class="pi pi-bell" /></li>
         <li><i class="pi pi-bookmark" /></li>
-        <li><i class="pi pi-receipt" /></li>
+        <li :class="{ active: isActive('ListTopic') }">
+          <i class="pi pi-receipt" @click="navigateTo('ListTopic')" />
+        </li>
+        <li :class="{ active: isActive('UserSettings') }">
+          <i class="pi pi-user-edit" @click="navigateTo('UserSettings')" />
+        </li>
         <li><div class="underline-left-nav" /></li>
-        <li class="btn-login mt-9">
+        <li class="btn-login">
           <LoginModal />
         </li>
       </ul>
     </div>
     <div class="content">
-      <ListTopic />
+      <router-view />
     </div>
     <div class="rigth-nav">
       <InputText
@@ -90,22 +114,33 @@ const inputSearch = ref("");
   padding-top: 25vh;
 }
 
+.top-colomn-left-nav li {
+  padding: 3px;
+  margin-top: 25px;
+  border-radius: 6px;
+}
+
 .top-colomn-left-nav li i {
-  font-size: 25px;
-  margin-top: 30px;
+  font-size: 28px;
 }
 
 .top-colomn-left-nav li i:hover {
   background-color: rgb(199, 199, 199);
   border-radius: 5px;
-  padding: 6px;
+  padding: 2px;
   transition: 0.2s;
+}
+
+.active {
+  background-color: rgb(199, 199, 199);
+  width: fit-content;
+  height: auto;
 }
 
 .underline-left-nav {
   border-top: 2px solid rgb(178, 178, 178);
-  width: 50%;
-  margin-top: 40px;
+  width: 55%;
+  margin-top: 10px;
 }
 
 .btn-auth {

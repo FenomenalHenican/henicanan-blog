@@ -3,55 +3,61 @@ import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Dialog from "primevue/dialog";
 
-import {
-  auth,
-  provider,
-  signInWithPopup as signInWithGoogle,
-  signOut,
-} from "../firebase";
 import { useUserStore } from "../store/auth";
 
 import { ref, computed } from "vue";
 
 const userStore = useUserStore();
 
-const toogleLoginModal = ref(false);
+const tooggleLoginModal = ref(false);
+const tooggleRegistrForm = ref(false);
+
+const login = ref("");
+const password = ref("");
 
 const handleSignInWithGoogle = async () => {
+  await userStore.signInWithGoogleAction();
+  tooggleLoginModal.value = false;
+};
+
+const handleRegister = async () => {
   try {
-    const result = await signInWithGoogle(auth, provider);
-    const user = result.user;
-    userStore.setUser(user);
-    console.log("User:", user);
-    console.log(user.reloadUserInfo);
-    localStorage.setItem(
-      "userTokens",
-      JSON.stringify({
-        accessToken: user.stsTokenManager.accessToken,
-        refreshToken: user.stsTokenManager.refreshToken,
-        email: user.email,
-        userId: user.uid,
-      })
-    );
-    toogleLoginModal.value = false;
+    await userStore.registerWithEmailAndPassword(login.value, password.value);
+    tooggleRegistrForm.value = false;
   } catch (err) {
     console.log(err);
   }
 };
 
-const user = computed(() => useUserStore.user);
+const handleSignIn = async () => {
+  try {
+    await userStore.hadleSignInWithEmailAndPassword(
+      login.value,
+      password.value
+    );
+    tooggleLoginModal.value = false;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const handleSignOut = async () => {
+  await userStore.signOutAction();
+};
+
+const user = computed(() => userStore.user);
 </script>
 
 <template>
   <div>
     <div class="btn-login" v-if="!user">
-      <i class="pi pi-sign-in" @click="toogleLoginModal = true" />
+      <i class="pi pi-sign-in" @click="tooggleLoginModal = true" />
     </div>
     <div class="user-logout" v-else>
-      <Button @click="signOut"></Button>
+      <Button @click="handleSignOut"> <i class="pi pi-times" /></Button>
     </div>
     <Dialog
-      v-model:visible="toogleLoginModal"
+      v-model:visible="tooggleLoginModal"
       modal
       :pt="{
         root: 'border-none',
@@ -70,11 +76,16 @@ const user = computed(() => useUserStore.user);
           </div>
           <div class="wrapper-username-input">
             <label for="username" class="label-input-username">Username</label>
-            <InputText id="username" class="input-username" />
+            <InputText id="username" class="input-username" v-model="login" />
           </div>
           <div class="wrapper-password-input">
             <label for="password" class="label-input-password">Password</label>
-            <InputText id="password" class="input-password" type="password" />
+            <InputText
+              id="password"
+              class="input-password"
+              type="password"
+              v-model="password"
+            />
           </div>
           <div class="wrapper-auth-service">
             <Button class="btn-auth-github"><i class="pi pi-github" /></Button>
@@ -83,7 +94,42 @@ const user = computed(() => useUserStore.user);
             /></Button>
           </div>
           <div class="btn-nav">
-            <Button label="Sign-In" text class="btn-signin w-40" />
+            <Button
+              label="Sign-In"
+              text
+              class="btn-signin w-40"
+              @click="handleSignIn"
+            />
+          </div>
+          <div class="registration-wrapper mb-5 mt-6 ml-4">
+            <span class="registration-title" @click="tooggleRegistrForm = true"
+              >Still not registered? Go ahead and register</span
+            >
+            <div class="registration-form" v-if="tooggleRegistrForm">
+              <div class="flex">
+                <label for="label-regist-input-username">Username</label>
+                <InputText
+                  id="label-registr-input-username"
+                  placeholder="Enter username"
+                  class="registr-input-username ml-3"
+                  v-model="login"
+                />
+              </div>
+              <div>
+                <label for="label-regist-input-password">Password</label>
+                <InputText
+                  id="label-registr-input-password"
+                  placeholder="Enter password"
+                  class="registr-input-password ml-4"
+                  v-model="password"
+                />
+              </div>
+              <Button
+                label="Registr"
+                class="btn-registr"
+                @click="handleRegister"
+              />
+            </div>
           </div>
         </div>
       </template>
@@ -187,5 +233,31 @@ const user = computed(() => useUserStore.user);
   padding-top: 3px;
   padding-bottom: 3px;
   margin-bottom: 20px;
+}
+
+.registration-form {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.registr-input-username {
+  border: 2px solid black;
+  max-width: 30%;
+  padding-left: 10px;
+}
+
+.registr-input-password {
+  border: 2px solid black;
+  max-width: 30%;
+  padding-left: 10px;
+  margin-top: 10px;
+}
+
+.btn-registr {
+  margin-top: 20px;
+  margin-left: 10%;
+  width: 20vh;
+  background-color: rgb(232, 232, 232);
 }
 </style>

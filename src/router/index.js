@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomePage from "../components/HomePage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,7 +6,30 @@ const router = createRouter({
     {
       path: "/",
       name: "homepage",
-      component: HomePage,
+      component: () => import("../components/HomePage.vue"),
+      children: [
+        {
+          path: "",
+          redirect: { name: "ListTopic" },
+        },
+        {
+          path: "/list-topic",
+          name: "ListTopic",
+          component: () => import("../components/list-topics/ListTopic.vue"),
+        },
+        {
+          path: "/personal-area",
+          name: "PersonalArea",
+          component: () =>
+            import("../components/personal-page/PersonalPage.vue"),
+        },
+        {
+          path: "/user-settings",
+          name: "UserSettings",
+          component: () =>
+            import("../components/user-settings/UserSettings.vue"),
+        },
+      ],
     },
   ],
 });

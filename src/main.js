@@ -8,6 +8,7 @@ import { auth } from "./firebase";
 
 import "./assets/style.css";
 import "primevue/resources/themes/aura-light-green/theme.css";
+import "vue-phone-number-input/dist/vue-phone-number-input.css";
 
 const app = createApp(App);
 const pinia = createPinia();
