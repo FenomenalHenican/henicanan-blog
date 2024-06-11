@@ -6,7 +6,7 @@ import {
   signInWithPopup as signInWithGoogle,
   signOut,
   signInWithEmailAndPassword,
-} from "../firebase";
+} from "../firebase/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export const useUserStore = defineStore("user", () => {

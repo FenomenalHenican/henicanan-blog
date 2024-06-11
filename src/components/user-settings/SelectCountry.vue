@@ -7,7 +7,7 @@ import { ref } from "vue";
 
 const countries = getAllCountries();
 
-const selectedCountry = ref();
+const selectedCountry = ref(null);
 </script>
 <template>
   <div class="card flex justify-content-center">

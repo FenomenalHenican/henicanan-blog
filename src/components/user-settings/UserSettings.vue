@@ -3,10 +3,15 @@ import InputText from "primevue/inputtext";
 import Textarea from "primevue/textarea";
 import FileUpload from "primevue/fileupload";
 import Button from "primevue/button";
+import Toast from "primevue/toast";
 
 import SelectCountry from "./SelectCountry.vue";
 
+import { saveUserData, getUserData } from "../../firebase/firestoreService";
+import { getUserIdFromLocalStorage } from "../../store/getLocalStorage";
 import { ref } from "vue";
+
+const userId = getUserIdFromLocalStorage();
 
 const bool = false;
 const avatarUrl =
@@ -18,6 +23,26 @@ const inputTelegram = ref("");
 const inputGithub = ref("");
 const textAreaDescription = ref("");
 const onUpload = ref(null);
+
+const saveUserSettings = async () => {
+  const userData = {
+    firstName: inputFirstName.value,
+    secondName: inputSecondName.value,
+    telegram: inputTelegram.value,
+    gitHub: inputGithub.value,
+    discription: textAreaDescription.value,
+  };
+  if (typeof userData === "object") {
+    try {
+      await saveUserData(userId, userData);
+      console.log("Data sucсessfully save");
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
+    console.log("userData is a not object");
+  }
+};
 </script>
 <template>
   <div class="container">
@@ -92,7 +117,7 @@ const onUpload = ref(null);
         />
       </div>
     </div>
-    <Button label="Save data" class="btn-sava-data" />
+    <Button label="Save data" class="btn-sava-data" @click="saveUserSettings" />
   </div>
 </template>
 <style scoped>

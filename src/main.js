@@ -4,7 +4,7 @@ import PrimeVue from "primevue/config";
 import router from "./router";
 import { createPinia } from "pinia";
 import { useUserStore } from "./store/auth";
-import { auth } from "./firebase";
+import { auth } from "./firebase/firebase";
 
 import "./assets/style.css";
 import "primevue/resources/themes/aura-light-green/theme.css";
