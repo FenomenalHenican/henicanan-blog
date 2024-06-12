@@ -3,11 +3,15 @@ import { getAllCountries } from "../user-settings/countries";
 
 import Dropdown from "primevue/dropdown";
 
-import { ref } from "vue";
+import { ref, defineEmits, watch } from "vue";
 
 const countries = getAllCountries();
-
 const selectedCountry = ref(null);
+const emit = defineEmits(["update:selectedCountry"]);
+
+watch(selectedCountry, (newValue) => {
+  emit("update:selectedCountry", newValue);
+});
 </script>
 <template>
   <div class="card flex justify-content-center">

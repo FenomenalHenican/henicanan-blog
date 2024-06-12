@@ -22,7 +22,12 @@ const inputSecondName = ref("");
 const inputTelegram = ref("");
 const inputGithub = ref("");
 const textAreaDescription = ref("");
+const selectedCountry = ref(null);
 const onUpload = ref(null);
+
+const updateSelectedCountry = (newValue) => {
+  selectedCountry.value = newValue;
+};
 
 const saveUserSettings = async () => {
   const userData = {
@@ -31,6 +36,7 @@ const saveUserSettings = async () => {
     telegram: inputTelegram.value,
     gitHub: inputGithub.value,
     discription: textAreaDescription.value,
+    country: selectedCountry.value ? selectedCountry.value.name : "",
   };
   if (typeof userData === "object") {
     try {
@@ -70,7 +76,10 @@ const saveUserSettings = async () => {
         </div>
         <div class="wrapper-select-country">
           <span class="title-select-country">Country</span>
-          <SelectCountry class="select-country" />
+          <SelectCountry
+            class="select-country"
+            @update:selectedCountry="updateSelectedCountry"
+          />
         </div>
       </div>
     </div>
