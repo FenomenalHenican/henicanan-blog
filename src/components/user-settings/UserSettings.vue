@@ -10,12 +10,14 @@ import SelectCountry from "./SelectCountry.vue";
 import { saveUserData, getUserData } from "../../firebase/firestoreService";
 import { getUserIdFromLocalStorage } from "../../store/getLocalStorage";
 import { ref } from "vue";
+import { uploadImageToStorage } from "../../firebase/firebaseStorage";
 
 const userId = getUserIdFromLocalStorage();
 
 const bool = false;
-const avatarUrl =
-  "https://static-images.vnncdn.net/files/publish/2023/9/10/real-madrid-danh-cap-ngoc-quy-cua-pep-guardiola-775.jpg";
+const avatarUrl = ref(
+  "https://static-images.vnncdn.net/files/publish/2023/9/10/real-madrid-danh-cap-ngoc-quy-cua-pep-guardiola-775.jpg"
+);
 
 const inputFirstName = ref("");
 const inputSecondName = ref("");
@@ -23,10 +25,22 @@ const inputTelegram = ref("");
 const inputGithub = ref("");
 const textAreaDescription = ref("");
 const selectedCountry = ref(null);
-const onUpload = ref(null);
 
 const updateSelectedCountry = (newValue) => {
   selectedCountry.value = newValue;
+};
+
+const onUpload = async ({ files }) => {
+  const file = files[0];
+  if (file) {
+    try {
+      const downloadURL = await uploadImageToStorage(file);
+      avatarUrl.value = downloadURL;
+      console.log("Your file is successfully uploaded: ", downloadURL);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 };
 
 const saveUserSettings = async () => {
@@ -37,6 +51,8 @@ const saveUserSettings = async () => {
     gitHub: inputGithub.value,
     discription: textAreaDescription.value,
     country: selectedCountry.value ? selectedCountry.value.name : "",
+    userId: userId,
+    avatarUrl: avatarUrl.value,
   };
   if (typeof userData === "object") {
     try {
