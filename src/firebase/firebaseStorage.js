@@ -1,19 +1,20 @@
+import { storage } from "./firebase";
 import {
-  getStorage,
-  uploadBytesResumable,
+  ref as storageRef,
+  uploadBytes,
   getDownloadURL,
-  ref,
 } from "firebase/storage";
 
-const storage = getStorage();
+const uploadFile = async (file, userId) => {
+  if (!file) throw new Error("No file provided");
 
-export const uploadImageToStorage = async (file) => {
-  try {
-    const storageRef = ref(storage, "userAvatars/" + file.name);
-    const snapshot = await uploadBytesResumable(storageRef, file);
-    const downloadURL = await getDownloadURL(snapshot.ref);
-    return downloadURL;
-  } catch (err) {
-    console.log(err);
-  }
+  const storageReference = storageRef(
+    storage,
+    `avatars/${userId}/${file.name}`
+  );
+  await uploadBytes(storageReference, file);
+  const downloadURL = await getDownloadURL(storageReference);
+  return downloadURL;
 };
+
+export { uploadFile };

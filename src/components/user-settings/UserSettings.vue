@@ -1,24 +1,20 @@
 <script setup>
 import InputText from "primevue/inputtext";
 import Textarea from "primevue/textarea";
-import FileUpload from "primevue/fileupload";
 import Button from "primevue/button";
-import Toast from "primevue/toast";
 
 import SelectCountry from "./SelectCountry.vue";
 
 import { saveUserData, getUserData } from "../../firebase/firestoreService";
 import { getUserIdFromLocalStorage } from "../../store/getLocalStorage";
-import { ref } from "vue";
-import { uploadImageToStorage } from "../../firebase/firebaseStorage";
+import { uploadFile } from "../../firebase/firebaseStorage";
+import { onMounted, ref } from "vue";
 
 const userId = getUserIdFromLocalStorage();
 
 const bool = false;
-const avatarUrl = ref(
-  "https://static-images.vnncdn.net/files/publish/2023/9/10/real-madrid-danh-cap-ngoc-quy-cua-pep-guardiola-775.jpg"
-);
 
+const avatarUrl = ref("");
 const inputFirstName = ref("");
 const inputSecondName = ref("");
 const inputTelegram = ref("");
@@ -26,21 +22,19 @@ const inputGithub = ref("");
 const textAreaDescription = ref("");
 const selectedCountry = ref(null);
 
-const updateSelectedCountry = (newValue) => {
-  selectedCountry.value = newValue;
-};
-
-const onUpload = async ({ files }) => {
-  const file = files[0];
+const handleFileChange = async (event) => {
+  const file = event.target.files[0];
   if (file) {
     try {
-      const downloadURL = await uploadImageToStorage(file);
-      avatarUrl.value = downloadURL;
-      console.log("Your file is successfully uploaded: ", downloadURL);
+      avatarUrl.value = await uploadFile(file, userId);
     } catch (err) {
       console.log(err);
     }
   }
+};
+
+const updateSelectedCountry = (newValue) => {
+  selectedCountry.value = newValue;
 };
 
 const saveUserSettings = async () => {
@@ -100,16 +94,7 @@ const saveUserSettings = async () => {
       </div>
     </div>
     <div class="upload-file">
-      <Toast />
-      <FileUpload
-        mode="basic"
-        name="demo[]"
-        url="/api/upload"
-        accept="image/*"
-        :maxFileSize="1000000"
-        @upload="onUpload"
-        label="ddasdasdassda"
-      />
+      <input class="input-img-avatar" type="file" @change="handleFileChange" />
     </div>
     <div class="integration-service" v-if="bool">
       <span class="integration-title">User is autorizated with</span>
