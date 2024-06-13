@@ -2,17 +2,24 @@ import { db } from "./firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { getUserIdFromLocalStorage } from "../store/getLocalStorage";
 
-export const saveUserData = async (userId, userData) => {
+const removeEmptyFields = (obj) => {
+  return Object.fromEntries(
+    Object.entries(obj).filter((_, v) => v != null && v !== "")
+  );
+};
+
+const saveUserData = async (userId, userData) => {
   try {
+    const cleanedUserData = removeEmptyFields(userData);
     const userRef = doc(db, "users", userId);
-    await setDoc(userRef, userData);
+    await setDoc(userRef, cleanedUserData, { merge: true });
     console.log("User data succesfully saved: ", userData);
   } catch (err) {
     console.log(err);
   }
 };
 
-export const getUserData = async () => {
+const getUserData = async () => {
   try {
     const userId = getUserIdFromLocalStorage();
     const userRef = doc(db, "users", userId);
@@ -29,3 +36,5 @@ export const getUserData = async () => {
     return null;
   }
 };
+
+export { getUserData, saveUserData };

@@ -37,6 +37,21 @@ const updateSelectedCountry = (newValue) => {
   selectedCountry.value = newValue;
 };
 
+const getUserSettings = async () => {
+  const userData = await getUserData();
+  if (userData) {
+    inputFirstName.value = userData.firstName || "";
+    inputSecondName.value = userData.secondName || "";
+    inputTelegram.value = userData.telegram || "";
+    inputGithub.value = userData.gitHub || "";
+    textAreaDescription.value = userData.discription || "";
+    selectedCountry.value = userData.country || "";
+    avatarUrl.value = userData.avatarUrl || "";
+  }
+  console.log(userData);
+  return userData;
+};
+
 const saveUserSettings = async () => {
   const userData = {
     firstName: inputFirstName.value,
@@ -59,6 +74,10 @@ const saveUserSettings = async () => {
     console.log("userData is a not object");
   }
 };
+
+onMounted(() => {
+  getUserSettings();
+});
 </script>
 <template>
   <div class="container">
