@@ -33,22 +33,20 @@ const handleFileChange = async (event) => {
   }
 };
 
-const updateSelectedCountry = (newValue) => {
-  selectedCountry.value = newValue;
-};
-
 const getUserSettings = async () => {
   const userData = await getUserData();
+
   if (userData) {
     inputFirstName.value = userData.firstName || "";
     inputSecondName.value = userData.secondName || "";
     inputTelegram.value = userData.telegram || "";
     inputGithub.value = userData.gitHub || "";
     textAreaDescription.value = userData.discription || "";
-    selectedCountry.value = userData.country || "";
     avatarUrl.value = userData.avatarUrl || "";
+    selectedCountry.value = userData.country
+      ? { name: userData.country }
+      : null;
   }
-  console.log(userData);
   return userData;
 };
 
@@ -63,10 +61,10 @@ const saveUserSettings = async () => {
     userId: userId,
     avatarUrl: avatarUrl.value,
   };
+
   if (typeof userData === "object") {
     try {
       await saveUserData(userId, userData);
-      console.log("Data sucсessfully save");
     } catch (err) {
       console.log(err);
     }
@@ -105,10 +103,7 @@ onMounted(() => {
         </div>
         <div class="wrapper-select-country">
           <span class="title-select-country">Country</span>
-          <SelectCountry
-            class="select-country"
-            @update:selectedCountry="updateSelectedCountry"
-          />
+          <SelectCountry class="select-country" v-model="selectedCountry" />
         </div>
       </div>
     </div>
