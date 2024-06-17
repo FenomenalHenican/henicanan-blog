@@ -19,6 +19,7 @@ const inputFirstName = ref("");
 const inputSecondName = ref("");
 const inputTelegram = ref("");
 const inputGithub = ref("");
+const inputWorkPlace = ref("");
 const textAreaDescription = ref("");
 const selectedCountry = ref(null);
 
@@ -41,6 +42,7 @@ const getUserSettings = async () => {
     inputSecondName.value = userData.secondName || "";
     inputTelegram.value = userData.telegram || "";
     inputGithub.value = userData.gitHub || "";
+    inputWorkPlace.value = userData.workPlace || "";
     textAreaDescription.value = userData.discription || "";
     avatarUrl.value = userData.avatarUrl || "";
     selectedCountry.value = userData.country
@@ -58,6 +60,7 @@ const saveUserSettings = async () => {
     gitHub: inputGithub.value,
     discription: textAreaDescription.value,
     country: selectedCountry.value ? selectedCountry.value.name : "",
+    workPlace: inputWorkPlace.value,
     userId: userId,
     avatarUrl: avatarUrl.value,
   };
@@ -131,6 +134,14 @@ onMounted(() => {
           placeholder="@https://github.com/FenomenalHenican"
         />
       </div>
+      <div class="wrapper-work-place">
+        <span class="input-work-place-title">Place of work</span>
+        <InputText
+          class="input-work-place"
+          v-model="inputWorkPlace"
+          placeholder="Enter your place of work"
+        />
+      </div>
       <div class="wrapper-discriptions">
         <span class="discription-title"> About me</span>
         <Textarea
@@ -191,7 +202,8 @@ onMounted(() => {
 
 .title-input-first-name,
 .title-input-second-name,
-.title-select-country {
+.title-select-country,
+.input-work-place-title {
   font-weight: 600;
 }
 
@@ -231,12 +243,14 @@ onMounted(() => {
 }
 
 .input-telegram-title,
-.input-github-title {
+.input-github-title,
+.input-work-place-title {
   font-weight: 600;
 }
 
 .input-telegram,
-.input-github {
+.input-github,
+.input-work-place {
   margin-top: 10px;
   padding-left: 10px;
   height: 40px;
@@ -252,6 +266,13 @@ onMounted(() => {
 }
 
 .wrapper-discriptions {
+  margin-left: 50px;
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrapper-work-place {
   margin-left: 50px;
   padding-top: 30px;
   display: flex;
