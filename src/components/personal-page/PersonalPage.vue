@@ -1,10 +1,16 @@
 <script setup>
 import ProgressSpinner from "primevue/progressspinner";
+import Button from "primevue/button";
+
+import "primeicons/primeicons.css";
 
 import { getUserData, saveUserData } from "../../firebase/firestoreService";
 import { getUserIdFromLocalStorage } from "../../store/getLocalStorage";
+import { useRouter } from "vue-router";
 
 import { ref, onMounted } from "vue";
+
+const router = useRouter();
 
 const isInformationLoading = ref(false);
 
@@ -16,6 +22,7 @@ const secondName = ref("");
 const country = ref("");
 const gitHubLink = ref("");
 const telegramLink = ref("");
+const workPlace = ref("");
 const inputStatus = ref("");
 
 const getUserSettings = async () => {
@@ -28,6 +35,7 @@ const getUserSettings = async () => {
     country.value = userData.country;
     gitHubLink.value = userData.gitHub;
     telegramLink.value = userData.telegram;
+    workPlace.value = userData.workPlace;
     inputStatus.value = userData.status;
   }
   return userData;
@@ -49,6 +57,10 @@ const saveUserStatus = async () => {
   }
 };
 
+const redirectToUserSettings = () => {
+  router.push({ name: "UserSettings" });
+};
+
 onMounted(async () => {
   isInformationLoading.value = true;
   try {
@@ -64,6 +76,9 @@ onMounted(async () => {
     <div class="flex">
       <div class="avatar-wrapper">
         <img class="avatar" :src="avatarUrl" />
+        <Button @click="redirectToUserSettings"
+          >Edit profile <i class="pi pi-cog ml-3"
+        /></Button>
       </div>
       <div class="personal-info ml-7">
         <div class="user-name flex text-3xl mt-2">
@@ -78,10 +93,26 @@ onMounted(async () => {
             @keyup.enter="saveUserStatus"
           />
         </div>
-        <div class="country">{{ country }}</div>
-        <div class="add-info">
-          <div class="github-link">{{ gitHubLink }}</div>
-          <div class="telegram-link">{{ telegramLink }}</div>
+        <div class="wrapper-country flex" v-if="country">
+          <span class="country-title">Country:</span>
+          <div class="country">{{ country }}</div>
+        </div>
+        <div class="wrapper-work-place flex" v-if="workPlace">
+          <span class="work-place-title">Work of the place:</span>
+          <div class="work-place">{{ workPlace }}</div>
+        </div>
+        <div class="add-info" v-if="gitHubLink || telegramLink">
+          <span class="add-info-title">Add information</span>
+          <div class="ml-9">
+            <div class="wrapper-github flex" v-if="gitHubLink">
+              <span class="github-title">GitHub: </span>
+              <div class="github-link">{{ gitHubLink }}</div>
+            </div>
+            <div class="wrapper-telegram flex" v-if="telegramLink">
+              <span class="telegram-title">Telegram: </span>
+              <div class="telegram-link">{{ telegramLink }}</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -105,6 +136,7 @@ onMounted(async () => {
   border-bottom: 2px solid transparent;
   outline: none;
   font-size: 12px;
+  color: #5b5b5b;
 }
 
 .input-status:focus {
