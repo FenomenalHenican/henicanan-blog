@@ -1,63 +1,62 @@
 <script setup>
-import InputText from "primevue/inputtext";
+import Avatar from "primevue/avatar";
+import ProgressSpinner from "primevue/progressspinner";
 
-import { ref } from "vue";
+import { getUserData } from "../../firebase/firestoreService";
 
-const bool = false;
-const avatarUrl =
-  "https://static-images.vnncdn.net/files/publish/2023/9/10/real-madrid-danh-cap-ngoc-quy-cua-pep-guardiola-775.jpg";
+import { ref, onMounted } from "vue";
 
-const inputFirstName = ref("");
-const inputSecondName = ref("");
-const inputTelegram = ref("");
+const isInformationLoading = ref(false);
+
+const avatarUrl = ref("");
+const firstName = ref("");
+const secondName = ref("");
+const country = ref("");
+const gitHubLink = ref("");
+const telegramLink = ref("");
+
+const getUserSettings = async () => {
+  const userData = await getUserData();
+  console.log(userData);
+  if (userData) {
+    avatarUrl.value = userData.avatarUrl;
+    firstName.value = userData.firstName;
+    secondName.value = userData.secondName;
+    country.value = userData.country;
+    gitHubLink.value = userData.gitHub;
+    telegramLink.value = userData.telegram;
+  }
+  return userData;
+};
+
+onMounted(async () => {
+  isInformationLoading.value = true;
+  try {
+    await getUserSettings();
+  } finally {
+    isInformationLoading.value = false;
+  }
+});
 </script>
 <template>
-  <div class="container">
-    <div class="user-data">
-      <div
-        class="avatar-user"
-        :style="{ backgroundImage: `url(${avatarUrl})` }"
-      />
-      <div class="wrapper-input-name">
-        <div class="wrapper-input-first-name">
-          <span class="title-input-first-name">FIRST NAME</span>
-          <InputText
-            class="input-first-name"
-            type="text"
-            v-model="inputFirstName"
-          />
+  <ProgressSpinner v-if="isInformationLoading" />
+  <div class="container" v-else>
+    <div>
+      <div class="avatar-wrapper">
+        <Avatar :image="avatarUrl" size="normal" shape="circle" />
+      </div>
+      <div class="personal-info">
+        <div class="user-name">
+          <span class="first-name">{{ firstName }}</span>
+          <div class="second-name">{{ secondName }}</div>
         </div>
-        <div class="wrapper-input-second-name">
-          <span class="title-input-second-name">SECOND NAME</span>
-          <InputText
-            class="input-second-name"
-            type="text"
-            v-model="inputSecondName"
-          />
+        <div class="country">{{ country }}</div>
+        <div class="add-info">
+          <div class="github-link">{{ gitHubLink }}</div>
+          <div class="telegram-link">{{ telegramLink }}</div>
         </div>
       </div>
     </div>
-    <div class="integration-service" v-if="bool">
-      <span class="integration-title">User is autorizated with</span>
-      <div class="service-title">Google</div>
-    </div>
-    <div class="personal-data">
-      <div class="wrapper-input-telegram">
-        <span class="input-telegram-title">Telegram link</span>
-        <InputText
-          class="input-telegram"
-          v-model="inputTelegram"
-          placeholder="@henicanan"
-        />
-      </div>
-      <div class="wrapper-input-github">
-        <span class="input-github-title">GitHub link</span>
-        <InputText
-          class="input-github"
-          v-model="inputGithub"
-          placeholder="@https://github.com/FenomenalHenican"
-        />
-      </div>
-    </div>
+    <div class="topic-list"></div>
   </div>
 </template>
