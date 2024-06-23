@@ -13,10 +13,10 @@ import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
 
-const showSuccess = () => {
+const showAnnountationTopic = () => {
   toast.add({
-    severity: "success",
-    summary: "Messege",
+    severity: "info",
+    summary: "Message",
     detail: "Your topic is added",
     life: 3000,
   });
@@ -53,7 +53,7 @@ const saveTopic = async () => {
     console.log("topicData", topicData);
     clearFields();
     closeDialog();
-    showSuccess();
+    showAnnountationTopic();
   } catch (err) {
     console.log(err);
   }
@@ -83,7 +83,6 @@ const saveTopic = async () => {
     <Button class="btn-save-topic" label="Save Topic" @click="saveTopic" />
   </Dialog>
   <Toast />
-  <Button label="Success" severity="success" @click="showSuccess" />
 </template>
 
 <style>
