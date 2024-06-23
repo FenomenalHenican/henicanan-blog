@@ -122,6 +122,7 @@ const user = computed(() => userStore.user);
                   placeholder="Enter password"
                   class="registr-input-password ml-4"
                   v-model="password"
+                  type="password"
                 />
               </div>
               <Button

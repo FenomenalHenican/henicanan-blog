@@ -3,6 +3,7 @@ import Button from "primevue/button";
 import Message from "primevue/message";
 import SelectButton from "primevue/selectbutton";
 
+import CreateTopic from "../create-topic/CreateTopic.vue";
 import Topic from "../../UIComponents/Topic.vue";
 
 import "primeicons/primeicons.css";
@@ -11,6 +12,11 @@ import { ref } from "vue";
 
 const valueOfNavCatalog = ref("Recommended");
 const optionsNavCatalog = ref(["Following", "Recommended"]);
+const isVisibleTopic = ref(false);
+
+const tooggleVisibleTopic = () => {
+  isVisibleTopic.value = !isVisibleTopic.value;
+};
 </script>
 
 <template>
@@ -22,9 +28,11 @@ const optionsNavCatalog = ref(["Following", "Recommended"]);
         rounded
         aria-label="Bookmark"
         class="btn-add-topic"
+        @click="tooggleVisibleTopic"
       />
       <span class="add-topic-title">Click to create a discussion topic</span>
     </div>
+    <CreateTopic v-model:visible="isVisibleTopic" />
     <Message severity="secondary" class="add-topic-warning"
       >Click on the plus icon to create a discussion topic. After filling out
       the fields and sending them for moderation, you will receive a response in

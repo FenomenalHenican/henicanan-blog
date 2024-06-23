@@ -37,4 +37,15 @@ const getUserData = async () => {
   }
 };
 
-export { getUserData, saveUserData };
+const setTopic = async (topicData) => {
+  try {
+    const cleanedTopicData = removeEmptyFields(topicData);
+    const topicRef = doc(db, "topics");
+    await setDoc(topicRef, cleanedTopicData);
+    console.log("Topic succesfully added", topicData);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export { getUserData, saveUserData, setTopic };

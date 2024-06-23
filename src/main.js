@@ -6,6 +6,8 @@ import { createPinia } from "pinia";
 import { useUserStore } from "./store/auth";
 import { auth } from "./firebase/firebase";
 
+import ToastService from "primevue/toastservice";
+
 import "./assets/style.css";
 import "primevue/resources/themes/aura-light-green/theme.css";
 import "vue-phone-number-input/dist/vue-phone-number-input.css";
@@ -26,6 +28,7 @@ auth.onAuthStateChanged((user) => {
 });
 
 app.use(router);
+app.use(ToastService);
 app.use(PrimeVue);
 
 app.mount("#app");

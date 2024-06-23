@@ -16,6 +16,14 @@ const router = createRouter({
           path: "/list-topic",
           name: "ListTopic",
           component: () => import("../components/list-topics/ListTopic.vue"),
+          children: [
+            {
+              path: "/create-topic",
+              name: "createtopic",
+              component: () =>
+                import("../components/create-topic/CreateTopic.vue"),
+            },
+          ],
         },
         {
           path: "/personal-area",
