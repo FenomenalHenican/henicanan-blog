@@ -10,6 +10,8 @@ import { useRouter } from "vue-router";
 
 import { ref, onMounted } from "vue";
 
+import anonim from "../../img/anonim.jpg";
+
 const router = useRouter();
 
 const isInformationLoading = ref(false);
@@ -27,7 +29,6 @@ const inputStatus = ref("");
 
 const getUserSettings = async () => {
   const userData = await getUserData();
-  console.log(userData);
   if (userData) {
     avatarUrl.value = userData.avatarUrl;
     firstName.value = userData.firstName;
@@ -45,7 +46,6 @@ const saveUserStatus = async () => {
   const userData = {
     status: inputStatus.value,
   };
-  console.log(userData);
   if (userData) {
     try {
       await saveUserData(userId, userData);
@@ -71,11 +71,15 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <ProgressSpinner v-if="isInformationLoading" class="text-slate-300" />
+  <ProgressSpinner
+    strokeWidth="3"
+    v-if="isInformationLoading"
+    class="loading-spinner"
+  />
   <div class="container" v-else>
     <div class="flex">
       <div class="avatar-wrapper">
-        <img class="avatar" :src="avatarUrl" />
+        <img class="avatar" :src="avatarUrl || anonim" />
         <Button @click="redirectToUserSettings"
           >Edit profile <i class="pi pi-cog ml-3"
         /></Button>
@@ -121,9 +125,20 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+.loading-spinner {
+  align-items: centers;
+  margin-top: 30%;
+  margin-left: 40%;
+  height: 150px;
+  width: 150px;
+  color: black;
+  justify-content: center;
+  display: flex;
+}
+
 .avatar {
   margin-top: 10px;
-  max-width: 300px;
+  max-width: 250px;
   max-height: 300px;
   width: auto;
   height: auto;

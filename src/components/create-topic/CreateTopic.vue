@@ -121,6 +121,8 @@ const saveTopic = async () => {
   padding-left: 10px;
   padding-top: 3px;
   padding-bottom: 3px;
+  border: 1.5px solid #999;
+  border-radius: 7px;
 }
 
 .btn-save-topic {

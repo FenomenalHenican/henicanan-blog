@@ -10,6 +10,8 @@ import { getUserIdFromLocalStorage } from "../../store/getLocalStorage";
 import { uploadFile } from "../../firebase/firebaseStorage";
 import { onMounted, ref } from "vue";
 
+import anonim from "../../img/anonim.jpg";
+
 const userId = getUserIdFromLocalStorage();
 
 const bool = false;
@@ -85,7 +87,7 @@ onMounted(() => {
     <div class="user-data">
       <div
         class="avatar-user"
-        :style="{ backgroundImage: `url(${avatarUrl})` }"
+        :style="{ backgroundImage: `url(${avatarUrl || anonim})` }"
       />
       <div class="wrapper-input-name">
         <div class="wrapper-input-first-name">
